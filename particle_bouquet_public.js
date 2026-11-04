@@ -10,7 +10,7 @@ const TAU = Math.PI * 2;
 const MODEL_CENTER_Z = 0.0;
 const CUBE_ROTATION_SPEED = 0.22;
 const CUBE_PITCH = Math.PI;
-const SCENE_DOWN_CM = 2.0;
+const SCENE_DOWN_CM = 0.0;
 const CSS_PIXELS_PER_CM = 96 / 2.54;
 
 const canvas = document.getElementById("scene");
@@ -734,7 +734,7 @@ function createParticleMaterial(simulation) {
       uModelCenterZ: { value: MODEL_CENTER_Z },
       uPixelRatio: { value: 1.0 },
       uPointScale: { value: 1.0 },
-      uAlphaScale: { value: 0.20 },
+      uAlphaScale: { value: COMPACT_VIEW ? 0.13 : 0.20 },
       uTime: { value: 0.0 },
     },
     vertexShader: `
@@ -992,10 +992,11 @@ function createPostProcessor(renderer) {
         vec3 background = vec3(0.0025, 0.0035, 0.009) + vec3(0.020, 0.006, 0.014) * halo;
         vec3 color =
           background +
-          sceneColor * 0.98 +
-          fogColor * 0.52 +
-          bloomColor * 1.38;
+          sceneColor * (${COMPACT_VIEW ? "0.90" : "0.98"}) +
+          fogColor * (${COMPACT_VIEW ? "0.32" : "0.52"}) +
+          bloomColor * (${COMPACT_VIEW ? "0.88" : "1.38"});
         color = vec3(1.0) - exp(-color * 1.18);
+        color *= ${COMPACT_VIEW ? "0.78" : "1.0"};
         gl_FragColor = vec4(color, 1.0);
       }
     `,
@@ -1311,14 +1312,14 @@ async function start() {
     renderer.setClearColor(0x010205, 1);
     renderer.clear();
 
-    material.uniforms.uPointScale.value = 12.0;
-    material.uniforms.uAlphaScale.value = 0.008;
+    material.uniforms.uPointScale.value = COMPACT_VIEW ? 9.0 : 12.0;
+    material.uniforms.uAlphaScale.value = COMPACT_VIEW ? 0.005 : 0.008;
     renderer.render(scene, camera);
-    material.uniforms.uPointScale.value = 4.2;
-    material.uniforms.uAlphaScale.value = 0.028;
+    material.uniforms.uPointScale.value = COMPACT_VIEW ? 3.4 : 4.2;
+    material.uniforms.uAlphaScale.value = COMPACT_VIEW ? 0.018 : 0.028;
     renderer.render(scene, camera);
     material.uniforms.uPointScale.value = 1.0;
-    material.uniforms.uAlphaScale.value = 0.20;
+    material.uniforms.uAlphaScale.value = COMPACT_VIEW ? 0.13 : 0.20;
     renderer.render(scene, camera);
     post.render();
 
