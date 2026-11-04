@@ -572,36 +572,16 @@ async function createReferenceParticleData() {
     if (coreFill) {
       const tone = Math.random();
       particleColor =
-        tone < 0.28
-          ? mixColor(WHITE, PINK, randomBetween(0.42, 0.74))
-          : tone < 0.78
+        tone < 0.14
+          ? mixColor(WHITE, PINK, randomBetween(0.55, 0.82))
+          : tone < 0.84
             ? PINK
-            : tone < 0.94
+            : tone < 0.96
               ? mixColor(PINK, ROSE_RED, 0.35)
               : ROSE_RED;
     }
-    const chroma =
-      Math.max(red, green, blue) - Math.min(red, green, blue);
-    if (
-      !coreFill &&
-      imageY < 0.40 &&
-      luminance > 0.32 &&
-      chroma < 0.18 &&
-      Math.random() < 0.90
-    ) {
-      particleColor = mixColor(PINK, particleColor, 0.16);
-    } else if (
-      !coreFill &&
-      imageY >= 0.40 &&
-      imageY < 0.68 &&
-      !blueAccent &&
-      chroma < 0.24 &&
-      Math.random() < 0.58
-    ) {
-      particleColor = mixColor(particleColor, WHITE, 0.38);
-    }
-    const centerDim = coreFill ? 0.80 : 1.0;
-    const topEmphasis = !coreFill && imageY < 0.40 ? 1.16 : 1.0;
+    const centerDim = coreFill ? 0.72 : 1.0;
+    const topEmphasis = !coreFill && imageY < 0.40 ? 1.12 : 1.0;
     attributes[dataOffset] = particleColor[0] * colorLift * centerDim * topEmphasis;
     attributes[dataOffset + 1] = particleColor[1] * colorLift * centerDim * topEmphasis;
     attributes[dataOffset + 2] = particleColor[2] * colorLift * centerDim * topEmphasis;
@@ -754,7 +734,7 @@ function createParticleMaterial(simulation) {
       uModelCenterZ: { value: MODEL_CENTER_Z },
       uPixelRatio: { value: 1.0 },
       uPointScale: { value: 1.0 },
-      uAlphaScale: { value: COMPACT_VIEW ? 0.15 : 0.20 },
+      uAlphaScale: { value: COMPACT_VIEW ? 0.13 : 0.20 },
       uTime: { value: 0.0 },
     },
     vertexShader: `
@@ -1012,11 +992,11 @@ function createPostProcessor(renderer) {
         vec3 background = vec3(0.0025, 0.0035, 0.009) + vec3(0.020, 0.006, 0.014) * halo;
         vec3 color =
           background +
-          sceneColor * (${COMPACT_VIEW ? "0.96" : "0.98"}) +
+          sceneColor * (${COMPACT_VIEW ? "0.90" : "0.98"}) +
           fogColor * (${COMPACT_VIEW ? "0.32" : "0.52"}) +
           bloomColor * (${COMPACT_VIEW ? "0.88" : "1.38"});
         color = vec3(1.0) - exp(-color * 1.18);
-        color *= ${COMPACT_VIEW ? "0.86" : "1.0"};
+        color *= ${COMPACT_VIEW ? "0.78" : "1.0"};
         gl_FragColor = vec4(color, 1.0);
       }
     `,
@@ -1333,13 +1313,13 @@ async function start() {
     renderer.clear();
 
     material.uniforms.uPointScale.value = COMPACT_VIEW ? 9.0 : 12.0;
-    material.uniforms.uAlphaScale.value = COMPACT_VIEW ? 0.006 : 0.008;
+    material.uniforms.uAlphaScale.value = COMPACT_VIEW ? 0.005 : 0.008;
     renderer.render(scene, camera);
     material.uniforms.uPointScale.value = COMPACT_VIEW ? 3.4 : 4.2;
-    material.uniforms.uAlphaScale.value = COMPACT_VIEW ? 0.021 : 0.028;
+    material.uniforms.uAlphaScale.value = COMPACT_VIEW ? 0.018 : 0.028;
     renderer.render(scene, camera);
     material.uniforms.uPointScale.value = 1.0;
-    material.uniforms.uAlphaScale.value = COMPACT_VIEW ? 0.15 : 0.20;
+    material.uniforms.uAlphaScale.value = COMPACT_VIEW ? 0.13 : 0.20;
     renderer.render(scene, camera);
     post.render();
 
