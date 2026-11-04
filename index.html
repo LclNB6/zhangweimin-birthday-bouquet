@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>张卫敏女士，生日快乐</title>
+  <meta name="description" content="张卫敏女士，祝您生日快乐，身体健康，岁岁平安。">
+  <meta name="theme-color" content="#010205">
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: dark;
+      background: #010205;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 73% 48%, rgba(56, 20, 34, 0.24), transparent 40%),
+        #010205;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      outline: none;
+    }
+
+    .blessing-layer {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .blessing {
+      position: absolute;
+      top: -14vh;
+      width: max-content;
+      max-width: 11vw;
+      white-space: normal;
+      line-height: 1.55;
+      color: var(--text-color, rgba(255, 224, 232, 0.70));
+      font-family: "STKaiti", "KaiTi", "Microsoft YaHei UI", serif;
+      font-size: var(--font-size, 20px);
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-shadow:
+        0 0 8px rgba(255, 214, 221, 0.42),
+        0 0 22px rgba(255, 155, 176, 0.22);
+      animation: blessing-fall var(--duration, 13s) linear forwards;
+      will-change: transform, opacity;
+    }
+
+    @keyframes blessing-fall {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, -8vh, 0);
+      }
+      12% {
+        opacity: var(--opacity, 0.68);
+      }
+      78% {
+        opacity: calc(var(--opacity, 0.68) * 0.72);
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(var(--drift, 18px), 116vh, 0);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .blessing {
+        max-width: 20vw;
+        line-height: 1.45;
+        letter-spacing: 0.08em;
+        text-shadow:
+          0 0 7px rgba(255, 214, 221, 0.38),
+          0 0 18px rgba(255, 155, 176, 0.18);
+      }
+    }
+
+    #error {
+      display: none;
+      position: fixed;
+      inset: 0;
+      place-items: center;
+      color: #f0ced8;
+      background: #010205;
+      font: 16px/1.7 "Microsoft YaHei UI", sans-serif;
+      white-space: pre-line;
+      text-align: center;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <canvas id="scene"></canvas>
+  <div id="blessing-layer" class="blessing-layer" aria-hidden="true"></div>
+  <div id="error"></div>
+  <script type="module" src="./particle_bouquet_public.js"></script>
+</body>
+</html>
