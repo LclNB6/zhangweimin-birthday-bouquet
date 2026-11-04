@@ -4,7 +4,7 @@ import { GPUComputationRenderer } from "https://cdn.jsdelivr.net/npm/three@0.180
 
 const COMPACT_VIEW =
   window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 900;
-const TEXTURE_SIZE = COMPACT_VIEW ? 288 : 512;
+const TEXTURE_SIZE = COMPACT_VIEW ? 448 : 512;
 const PARTICLE_COUNT = TEXTURE_SIZE * TEXTURE_SIZE;
 const TAU = Math.PI * 2;
 const MODEL_CENTER_Z = 0.0;
@@ -658,13 +658,13 @@ function createSimulation(renderer, data) {
       );
       vec3 swirl = vec3(-position.y, position.x, 0.0) * 0.045;
 
-      velocity += towardTarget * 1.85 * uDelta;
-      velocity += (breathing * 0.035 + swirl) * uDelta;
-      velocity *= exp(-1.55 * uDelta);
+      velocity += towardTarget * 4.10 * uDelta;
+      velocity += (breathing * 0.008 + swirl * 0.20) * uDelta;
+      velocity *= exp(-2.85 * uDelta);
 
       float speed = length(velocity);
-      if (speed > 0.42) {
-        velocity = velocity / speed * 0.42;
+      if (speed > 0.075) {
+        velocity = velocity / speed * 0.075;
       }
 
       gl_FragColor = vec4(velocity, 0.0);
@@ -1234,7 +1234,7 @@ async function start() {
     const height = Math.max(1, window.innerHeight);
     const pixelRatio = Math.min(
       window.devicePixelRatio || 1,
-      COMPACT_VIEW ? 1.2 : 1.6,
+      COMPACT_VIEW ? 1.4 : 1.6,
     );
     renderer.setPixelRatio(pixelRatio);
     renderer.setSize(width, height, false);
@@ -1313,7 +1313,7 @@ async function start() {
     material.uniforms.uPitch.value = 0.01;
     material.uniforms.uTime.value = now / 1000;
     const responsiveScale = Math.min(state.width, state.height) *
-      (COMPACT_VIEW ? 0.21 : 0.275) *
+      (COMPACT_VIEW ? 0.235 : 0.275) *
       state.zoom;
     material.uniforms.uScale.value = responsiveScale;
     cube.material.uniforms.uScale.value =
