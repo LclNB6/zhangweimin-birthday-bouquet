@@ -1120,6 +1120,14 @@ function startBlessingRain() {
     "愿您眼里有光，心中有暖",
     "生日快乐，幸福久久",
     "愿生活有滋有味，日子有盼有甜",
+    "愿您事事如意",
+    "愿健康常伴左右",
+    "愿快乐与您相随",
+    "愿此后皆是好时光",
+    "家和万事兴",
+    "愿您心宽福自来",
+    "愿生活温柔有趣",
+    "愿所盼皆如愿",
   ];
   let nextIndex = 0;
 
@@ -1163,10 +1171,10 @@ function startBlessingRain() {
     layer.appendChild(line);
   };
 
-  for (let index = 0; index < 6; index += 1) {
+  for (let index = 0; index < 10; index += 1) {
     spawn(true);
   }
-  window.setInterval(() => spawn(false), COMPACT_VIEW ? 1700 : 1300);
+  window.setInterval(() => spawn(false), COMPACT_VIEW ? 1400 : 1000);
 }
 
 
