@@ -4,7 +4,7 @@ import { GPUComputationRenderer } from "https://cdn.jsdelivr.net/npm/three@0.180
 
 const COMPACT_VIEW =
   window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 900;
-const TEXTURE_SIZE = COMPACT_VIEW ? 448 : 512;
+const TEXTURE_SIZE = COMPACT_VIEW ? 384 : 512;
 const PARTICLE_COUNT = TEXTURE_SIZE * TEXTURE_SIZE;
 const TAU = Math.PI * 2;
 const MODEL_CENTER_Z = 0.0;
@@ -747,7 +747,7 @@ function createParticleMaterial(simulation) {
       uModelCenterZ: { value: MODEL_CENTER_Z },
       uPixelRatio: { value: 1.0 },
       uPointScale: { value: 1.0 },
-      uAlphaScale: { value: COMPACT_VIEW ? 0.13 : 0.20 },
+      uAlphaScale: { value: COMPACT_VIEW ? 0.105 : 0.20 },
       uTime: { value: 0.0 },
     },
     vertexShader: `
@@ -1005,11 +1005,13 @@ function createPostProcessor(renderer) {
         vec3 background = vec3(0.0025, 0.0035, 0.009) + vec3(0.020, 0.006, 0.014) * halo;
         vec3 color =
           background +
-          sceneColor * (${COMPACT_VIEW ? "0.90" : "0.98"}) +
-          fogColor * (${COMPACT_VIEW ? "0.32" : "0.52"}) +
-          bloomColor * (${COMPACT_VIEW ? "0.88" : "1.38"});
+          sceneColor * (${COMPACT_VIEW ? "0.86" : "0.98"}) +
+          fogColor * (${COMPACT_VIEW ? "0.28" : "0.52"}) +
+          bloomColor * (${COMPACT_VIEW ? "0.72" : "1.38"});
         color = vec3(1.0) - exp(-color * 1.18);
-        color *= ${COMPACT_VIEW ? "0.78" : "1.0"};
+        color *= ${COMPACT_VIEW ? "0.70" : "1.0"};
+        float luminance = dot(color, vec3(0.2126, 0.7152, 0.0722));
+        color = mix(vec3(luminance), color, ${COMPACT_VIEW ? "0.88" : "1.0"});
         gl_FragColor = vec4(color, 1.0);
       }
     `,
@@ -1242,7 +1244,7 @@ async function start() {
     const height = Math.max(1, window.innerHeight);
     const pixelRatio = Math.min(
       window.devicePixelRatio || 1,
-      COMPACT_VIEW ? 1.4 : 1.6,
+      COMPACT_VIEW ? 1.25 : 1.6,
     );
     renderer.setPixelRatio(pixelRatio);
     renderer.setSize(width, height, false);
@@ -1333,14 +1335,14 @@ async function start() {
     renderer.setClearColor(0x010205, 1);
     renderer.clear();
 
-    material.uniforms.uPointScale.value = COMPACT_VIEW ? 9.0 : 12.0;
-    material.uniforms.uAlphaScale.value = COMPACT_VIEW ? 0.005 : 0.008;
+    material.uniforms.uPointScale.value = COMPACT_VIEW ? 8.0 : 12.0;
+    material.uniforms.uAlphaScale.value = COMPACT_VIEW ? 0.0045 : 0.008;
     renderer.render(scene, camera);
-    material.uniforms.uPointScale.value = COMPACT_VIEW ? 3.4 : 4.2;
-    material.uniforms.uAlphaScale.value = COMPACT_VIEW ? 0.018 : 0.028;
+    material.uniforms.uPointScale.value = COMPACT_VIEW ? 3.0 : 4.2;
+    material.uniforms.uAlphaScale.value = COMPACT_VIEW ? 0.015 : 0.028;
     renderer.render(scene, camera);
     material.uniforms.uPointScale.value = 1.0;
-    material.uniforms.uAlphaScale.value = COMPACT_VIEW ? 0.13 : 0.20;
+    material.uniforms.uAlphaScale.value = COMPACT_VIEW ? 0.105 : 0.20;
     renderer.render(scene, camera);
     post.render();
 
