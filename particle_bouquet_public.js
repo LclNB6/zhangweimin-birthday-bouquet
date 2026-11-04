@@ -579,6 +579,19 @@ async function createReferenceParticleData() {
             : tone < 0.96
               ? mixColor(PINK, ROSE_RED, 0.35)
               : ROSE_RED;
+      if (Math.random() < 0.25) {
+        particleColor = mixColor(
+          particleColor,
+          ROSE_RED,
+          randomBetween(0.34, 0.58),
+        );
+      }
+    } else if (imageY < 0.43 && Math.random() < 0.46) {
+      particleColor = mixColor(
+        particleColor,
+        ROSE_RED,
+        randomBetween(0.40, 0.64),
+      );
     }
     const centerDim = coreFill ? 0.72 : 1.0;
     const topEmphasis = !coreFill && imageY < 0.40 ? 1.12 : 1.0;
