@@ -572,11 +572,11 @@ async function createReferenceParticleData() {
     if (coreFill) {
       const tone = Math.random();
       particleColor =
-        tone < 0.08
-          ? mixColor(WHITE, PINK, randomBetween(0.55, 0.82))
-          : tone < 0.84
+        tone < 0.28
+          ? mixColor(WHITE, PINK, randomBetween(0.42, 0.74))
+          : tone < 0.78
             ? PINK
-            : tone < 0.96
+            : tone < 0.94
               ? mixColor(PINK, ROSE_RED, 0.35)
               : ROSE_RED;
     }
@@ -584,11 +584,21 @@ async function createReferenceParticleData() {
       Math.max(red, green, blue) - Math.min(red, green, blue);
     if (
       !coreFill &&
+      imageY < 0.40 &&
       luminance > 0.32 &&
-      chroma < 0.12 &&
-      Math.random() < 0.72
+      chroma < 0.18 &&
+      Math.random() < 0.90
     ) {
-      particleColor = mixColor(PINK, particleColor, 0.22);
+      particleColor = mixColor(PINK, particleColor, 0.16);
+    } else if (
+      !coreFill &&
+      imageY >= 0.40 &&
+      imageY < 0.68 &&
+      !blueAccent &&
+      chroma < 0.24 &&
+      Math.random() < 0.58
+    ) {
+      particleColor = mixColor(particleColor, WHITE, 0.38);
     }
     const centerDim = coreFill ? 0.80 : 1.0;
     const topEmphasis = !coreFill && imageY < 0.40 ? 1.16 : 1.0;
